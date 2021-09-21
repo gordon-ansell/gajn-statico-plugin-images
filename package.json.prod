@@ -1,0 +1,33 @@
+{
+	"name": "gajn-statico-plugin-images",
+	"version": "0.1.0",
+	"description": "Image sizing/conversion plugin for Statico SSG.",
+	"homepage": "https://gordonansell.com/statico",
+	"license": "MIT",
+	"minimum-stability": "dev",
+	"main": ".statico.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/gordon-ansell/gajn-statico-plugin-images"
+	},
+	"authors": [
+		{
+			"name": "Gordon Ansell",
+			"email": "contact@gordonansell.com",
+			"url": "https://gordonansell.com"
+		}
+	],
+	"files": [
+		"src/"
+	],
+	"dependencies": {
+        "deasync": "*",
+		"gordon-ansell/gajn-framework": "*",
+        "image-size": "*",
+        "sharp": "*"
+	},
+	"devDependencies": {},
+	"engines": {
+		"node": ">=12"
+	}
+}
