@@ -22,7 +22,7 @@
 	],
 	"dependencies": {
         "deasync": "*",
-		"gordon-ansell/gajn-framework": "*",
+		"gajn-framework": "../../framework",
         "image-size": "*",
         "sharp": "*"
 	},
