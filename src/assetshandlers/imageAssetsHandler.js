@@ -155,11 +155,11 @@ class StaticoImageAssetsHandlerError extends GAError {}
      * Process a file.
      * 
      * @param   {string}    filePath    Path to file to process.
-     * @param   {boolean}
+     * @param   {boolean}   skip        Skip processing?
      * 
      * @return
      */
-    async process(filePath)
+    async process(filePath, skip = false)
     {
         // Grab the options.
         let options = this.config.assetHandlers.image;
@@ -171,73 +171,76 @@ class StaticoImageAssetsHandlerError extends GAError {}
         let ext = path.extname(relPath).substring(1);
         let op = path.join(this.config.sitePath, options.outputDir, path.dirname(relPath));
 
-        // Aliases?
-        if (options.aliases && options.aliases[ext]) {
-            ext = options.aliases[ext];
-        }
+        if (!skip) {
 
-        // Image dimensions.
-        let dims = imageSize(absPath);
-        let srcWidth = dims.width;
-        let srcHeight = dims.height;
-
-        //let op = path.join(this.config.outputPath, userOptions.output, path.basename(fp, path.extname(fp)) + '.css');
-        syslog.trace(`Image template handler is processing file: ${relPath}`, 'AssetsHandler:Image');
-        syslog.trace(`Source image size is ${srcWidth} x ${srcHeight}.`, 'AssetsHandler:Image');
-        syslog.trace(`Will output images to ${op}.`, 'AssetsHandler:Image');
-
-        let generated = {
-            files: []
-        }
-
-        await Promise.all(options.formats[ext].map(async outputFormat => {
-            let processedSomething = false;
-            await Promise.all(options.widths.map(async outputWidth => {
-                if (srcWidth >= outputWidth || options.allowUpscale === true) {
-                    let outputLoc = path.join(op, 
-                        options.filenameMask.replace('{fn}', basename)
-                            .replace('{width}', outputWidth)
-                            .replace('{ext}', outputFormat));
-                    processedSomething = true;
-                    syslog.trace(`Processing ${relPath} at ${outputWidth} (srcWidth = ${srcWidth}), format ${outputFormat}`, 'AssetsHandler:Image');
-                    syslog.trace(`===> will output to ${outputLoc}`, 'AssetsHandler:Image');
-                    await this.resizeImage(absPath, outputWidth, outputFormat, outputLoc, options);
-                    generated.files.push({file: outputLoc, width: outputWidth, format: outputFormat});
-                } else {
-                    syslog.trace(`Skipping ${relPath} because ${outputWidth} < ${srcWidth}, format ${outputFormat}`, 'AssetsHandler:Image');
-                }
-
-            }));
-
-            // If we processed nothing then just render at the source width.
-            if (!processedSomething) {
-                let outputLoc = path.join(op, 
-                    options.filenameMask.replace('{fn}', basename)
-                        .replace('{width}', srcWidth)
-                        .replace('{ext}', outputFormat));
-                syslog.trace(`Default processing ${relPath} at ${srcWidth}, format ${outputFormat}`, 'AssetsHandler:Image');
-                syslog.trace(`===> will output to ${outputLoc}`, 'AssetsHandler:Image');
-                await this.resizeImage(absPath, srcWidth, outputFormat, outputLoc, options);
-                generated.files.push({file: outputLoc, width: srcWidth, format: outputFormat});
+            // Aliases?
+            if (options.aliases && options.aliases[ext]) {
+                ext = options.aliases[ext];
             }
 
-            // Thumbnail?
-            if (options.generateThumbnail) {
-                let [widthWanted, heightWanted] = this.aspectResize(srcWidth, srcHeight, options.allowUpscale, 
-                    options.thumbnailSize.width, options.thumbnailSize.height);
-                let outputLoc = path.join(op, 
-                    options.thumbnailFilenameMask.replace('{fn}', basename)
-                        .replace('{width}', widthWanted)
-                        .replace('{ext}', outputFormat));
-                syslog.trace(`Processing ${relPath} at ${widthWanted}, format ${outputFormat}`, 'AssetsHandler:Image');
-                syslog.trace(`===> will output to ${outputLoc}`, 'AssetsHandler:Image');
-                await this.resizeImage(absPath, widthWanted, outputFormat, outputLoc, options);
-            }        
-        }));
+            // Image dimensions.
+            let dims = imageSize(absPath);
+            let srcWidth = dims.width;
+            let srcHeight = dims.height;
 
-        // Save generated.
-        options.generated.set(relPath, generated);
-        this.saveGenerated();
+            //let op = path.join(this.config.outputPath, userOptions.output, path.basename(fp, path.extname(fp)) + '.css');
+            syslog.trace(`Image template handler is processing file: ${relPath}`, 'AssetsHandler:Image');
+            syslog.trace(`Source image size is ${srcWidth} x ${srcHeight}.`, 'AssetsHandler:Image');
+            syslog.trace(`Will output images to ${op}.`, 'AssetsHandler:Image');
+
+            let generated = {
+                files: []
+            }
+
+            await Promise.all(options.formats[ext].map(async outputFormat => {
+                let processedSomething = false;
+                await Promise.all(options.widths.map(async outputWidth => {
+                    if (srcWidth >= outputWidth || options.allowUpscale === true) {
+                        let outputLoc = path.join(op, 
+                            options.filenameMask.replace('{fn}', basename)
+                                .replace('{width}', outputWidth)
+                                .replace('{ext}', outputFormat));
+                        processedSomething = true;
+                        syslog.trace(`Processing ${relPath} at ${outputWidth} (srcWidth = ${srcWidth}), format ${outputFormat}`, 'AssetsHandler:Image');
+                        syslog.trace(`===> will output to ${outputLoc}`, 'AssetsHandler:Image');
+                        await this.resizeImage(absPath, outputWidth, outputFormat, outputLoc, options);
+                        generated.files.push({file: outputLoc, width: outputWidth, format: outputFormat});
+                    } else {
+                        syslog.trace(`Skipping ${relPath} because ${outputWidth} < ${srcWidth}, format ${outputFormat}`, 'AssetsHandler:Image');
+                    }
+
+                }));
+
+                // If we processed nothing then just render at the source width.
+                if (!processedSomething) {
+                    let outputLoc = path.join(op, 
+                        options.filenameMask.replace('{fn}', basename)
+                            .replace('{width}', srcWidth)
+                            .replace('{ext}', outputFormat));
+                    syslog.trace(`Default processing ${relPath} at ${srcWidth}, format ${outputFormat}`, 'AssetsHandler:Image');
+                    syslog.trace(`===> will output to ${outputLoc}`, 'AssetsHandler:Image');
+                    await this.resizeImage(absPath, srcWidth, outputFormat, outputLoc, options);
+                    generated.files.push({file: outputLoc, width: srcWidth, format: outputFormat});
+                }
+
+                // Thumbnail?
+                if (options.generateThumbnail) {
+                    let [widthWanted, heightWanted] = this.aspectResize(srcWidth, srcHeight, options.allowUpscale, 
+                        options.thumbnailSize.width, options.thumbnailSize.height);
+                    let outputLoc = path.join(op, 
+                        options.thumbnailFilenameMask.replace('{fn}', basename)
+                            .replace('{width}', widthWanted)
+                            .replace('{ext}', outputFormat));
+                    syslog.trace(`Processing ${relPath} at ${widthWanted}, format ${outputFormat}`, 'AssetsHandler:Image');
+                    syslog.trace(`===> will output to ${outputLoc}`, 'AssetsHandler:Image');
+                    await this.resizeImage(absPath, widthWanted, outputFormat, outputLoc, options);
+                }        
+            }));
+
+            // Save generated.
+            options.generated.set(relPath, generated);
+            this.saveGenerated();
+        }
 
         // Copy the file too.
         let opc = path.join(this.config.outputPath, absPath.replace(this.config.sitePath, ''));
