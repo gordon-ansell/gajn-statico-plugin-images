@@ -240,8 +240,6 @@ class StaticoImageAssetsHandlerError extends GAError {}
             // Save generated.
             options.generated.set(relPath, generated);
             this.saveGenerated();
-        } else {
-            syslog.notice(`Skipped processing of ${relPath}`)        
         }
 
         // Copy the file too.
