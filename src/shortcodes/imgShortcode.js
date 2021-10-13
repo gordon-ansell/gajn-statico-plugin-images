@@ -119,7 +119,7 @@ class ImgShortcode extends NunjucksShortcode
         }
 
         let ret = '';
-        let imgHtml = new ImageHtml(opts);
+        let imgHtml = new ImageHtml(opts, this.config.hostname);
 
         let sources = this.formatFilesArray(files);
 
