@@ -130,7 +130,7 @@ class ImgShortcode extends NunjucksShortcode
 
         let generated = imageOpts.generated.get(url) || null;
 
-        ret = imgHtml.render(sources, args[1], true, url, generated);
+        ret = imgHtml.render(sources, args[1], true);
 
         let imgs = imgHtml.metaIds;
         if (imgs.length > 0) {
