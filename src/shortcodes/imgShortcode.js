@@ -130,6 +130,8 @@ class ImgShortcode extends NunjucksShortcode
         let w = imageOpts.generated.get(url).width || null;
         let h = imageOpts.generated.get(url).height || null;
 
+        syslog.error(w + ' .. ' + h);
+
         if (!args[1].width && w) {
             args[1].width = w;
         }
