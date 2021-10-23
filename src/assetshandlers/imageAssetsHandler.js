@@ -142,7 +142,7 @@ class StaticoImageAssetsHandlerError extends GAError {}
         // Make the directory.
         fsutils.mkdirRecurse(path.dirname(outputPath));
 
-        await sharper.toFile(outputPath).then(info => {
+        return await sharper.toFile(outputPath).then(info => {
             syslog.debug(`Wrote image file: ${outputPath.replace(this.config.sitePath, '')}`, 'AssetsHandler:Image');
             syslog.inspect(info, "warning");
             return info.height;
