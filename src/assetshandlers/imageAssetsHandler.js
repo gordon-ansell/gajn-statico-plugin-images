@@ -144,6 +144,7 @@ class StaticoImageAssetsHandlerError extends GAError {}
 
         await sharper.toFile(outputPath).then(info => {
             syslog.debug(`Wrote image file: ${outputPath.replace(this.config.sitePath, '')}`, 'AssetsHandler:Image');
+            syslog.inspect(info, "warning");
             return info.height;
         })
         .catch(err => {
@@ -205,7 +206,6 @@ class StaticoImageAssetsHandlerError extends GAError {}
                         syslog.trace(`Processing ${relPath} at ${outputWidth} (srcWidth = ${srcWidth}), format ${outputFormat}`, 'AssetsHandler:Image');
                         syslog.trace(`===> will output to ${outputLoc}`, 'AssetsHandler:Image');
                         let outputHeight = await this.resizeImage(absPath, outputWidth, outputFormat, outputLoc, options);
-                        syslog.error(outputHeight);
                         generated.files.push({file: outputLoc, width: outputWidth, height: outputHeight, format: outputFormat});
                     } else {
                         syslog.trace(`Skipping ${relPath} because ${outputWidth} < ${srcWidth}, format ${outputFormat}`, 'AssetsHandler:Image');
