@@ -137,6 +137,8 @@ class ImgShortcode extends NunjucksShortcode
             args[1].height = h;
         }
 
+        syslog.inspect(args[1], "warning");
+
         ret = imgHtml.render(sources, args[1], true);
 
         let imgs = imgHtml.metaIds;
