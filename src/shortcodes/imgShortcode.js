@@ -129,6 +129,10 @@ class ImgShortcode extends NunjucksShortcode
         }
 
         let generated = imageOpts.generated.get(url) || null;
+        let sel = generated.files[0];
+        let w = sel.width;
+        let h = sel.height;
+        syslog.error(`${w}/${h} = ${w/h}`);
 
         ret = imgHtml.render(sources, args[1], true);
 
