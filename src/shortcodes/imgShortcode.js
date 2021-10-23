@@ -132,9 +132,8 @@ class ImgShortcode extends NunjucksShortcode
         let sel = generated.files[0];
         let w = sel.width;
         let h = sel.height;
-        syslog.error(`${w}/${h} = ${w/h}`);
 
-        ret = imgHtml.render(sources, args[1], true);
+        ret = imgHtml.render(sources, args[1], true, w, h);
 
         let imgs = imgHtml.metaIds;
         if (imgs.length > 0) {
