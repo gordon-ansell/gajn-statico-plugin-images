@@ -127,10 +127,11 @@ class ImgShortcode extends NunjucksShortcode
         if (!imageOpts.generated.has(url)) {
             throw new NunjucksShortcodeImgError(`No generated files for URL: ${url}`);
         }
+        syslog.inspect(imageOpts.generated.get(url), "warning");
         let w = imageOpts.generated.get(url).width || null;
         let h = imageOpts.generated.get(url).height || null;
 
-        syslog.error(w + ' .. ' + h);
+        //syslog.error(w + ' .. ' + h);
 
         if (!args[1].width && w) {
             args[1].width = w;
@@ -139,7 +140,7 @@ class ImgShortcode extends NunjucksShortcode
             args[1].height = h;
         }
 
-        syslog.inspect(args[1], "warning");
+        //syslog.inspect(args[1], "warning");
 
         ret = imgHtml.render(sources, args[1], true);
 
