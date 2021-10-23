@@ -127,20 +127,10 @@ class ImgShortcode extends NunjucksShortcode
         if (!imageOpts.generated.has(url)) {
             throw new NunjucksShortcodeImgError(`No generated files for URL: ${url}`);
         }
-        syslog.inspect(imageOpts.generated.get(url), "warning");
-        let w = imageOpts.generated.get(url).files[0].width || null;
-        let h = imageOpts.generated.get(url).files[0].height || null;
 
-        //syslog.error(w + ' .. ' + h);
+        let generated = imageOpts.generated.get(url) || null;
 
-        if (!args[1].width && w) {
-            args[1].width = w;
-        }
-        if (!args[1].height && h) {
-            args[1].height = h;
-        }
-
-        //syslog.inspect(args[1], "warning");
+        syslog.inspect(generated, "warning");
 
         ret = imgHtml.render(sources, args[1], true);
 
