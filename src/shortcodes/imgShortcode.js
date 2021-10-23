@@ -127,13 +127,13 @@ class ImgShortcode extends NunjucksShortcode
         if (!imageOpts.generated.has(url)) {
             throw new NunjucksShortcodeImgError(`No generated files for URL: ${url}`);
         }
-        let w = imageOpts.generated.get(url).width;
-        let h = imageOpts.generated.get(url).height;
+        let w = imageOpts.generated.get(url).width || null;
+        let h = imageOpts.generated.get(url).height || null;
 
-        if (!args[1].width) {
+        if (!args[1].width && w) {
             args[1].width = w;
         }
-        if (!args[1].height) {
+        if (!args[1].height && h) {
             args[1].height = h;
         }
 
