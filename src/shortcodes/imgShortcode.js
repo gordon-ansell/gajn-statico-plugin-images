@@ -123,6 +123,20 @@ class ImgShortcode extends NunjucksShortcode
 
         let sources = this.formatFilesArray(files);
 
+        let imageOpts = this.config.assetHandlers.image;
+        if (!imageOpts.generated.has(url)) {
+            throw new NunjucksShortcodeImgError(`No generated files for URL: ${url}`);
+        }
+        let w = imageOpts.generated.get(url).width;
+        let h = imageOpts.generated.get(url).height;
+
+        if (!args[1].width) {
+            args[1].width = w;
+        }
+        if (!args[1].height) {
+            args[1].height = h;
+        }
+
         ret = imgHtml.render(sources, args[1], true);
 
         let imgs = imgHtml.metaIds;
