@@ -126,7 +126,7 @@ class StaticoImageAssetsHandlerError extends GAError {}
      * @param   {string}    outputPath      Output path.
      * @param   {object}    opts            Options.
      * 
-     * @return
+     * @return  {number}                    Height of generated image.
      */
     async resizeImage(src, requiredWidth, requiredFormat, outputPath, opts)
     {
@@ -144,6 +144,7 @@ class StaticoImageAssetsHandlerError extends GAError {}
 
         await sharper.toFile(outputPath).then(info => {
             syslog.debug(`Wrote image file: ${outputPath.replace(this.config.sitePath, '')}`, 'AssetsHandler:Image');
+            return info.height;
         })
         .catch(err => {
             syslog.error(`Failed to create ${outputPath}: ${err.message}.`);
@@ -203,8 +204,8 @@ class StaticoImageAssetsHandlerError extends GAError {}
                         processedSomething = true;
                         syslog.trace(`Processing ${relPath} at ${outputWidth} (srcWidth = ${srcWidth}), format ${outputFormat}`, 'AssetsHandler:Image');
                         syslog.trace(`===> will output to ${outputLoc}`, 'AssetsHandler:Image');
-                        await this.resizeImage(absPath, outputWidth, outputFormat, outputLoc, options);
-                        generated.files.push({file: outputLoc, width: outputWidth, format: outputFormat});
+                        let outputHeight = await this.resizeImage(absPath, outputWidth, outputFormat, outputLoc, options);
+                        generated.files.push({file: outputLoc, width: outputWidth, height: outputHeight, format: outputFormat});
                     } else {
                         syslog.trace(`Skipping ${relPath} because ${outputWidth} < ${srcWidth}, format ${outputFormat}`, 'AssetsHandler:Image');
                     }
@@ -220,7 +221,7 @@ class StaticoImageAssetsHandlerError extends GAError {}
                     syslog.trace(`Default processing ${relPath} at ${srcWidth}, format ${outputFormat}`, 'AssetsHandler:Image');
                     syslog.trace(`===> will output to ${outputLoc}`, 'AssetsHandler:Image');
                     await this.resizeImage(absPath, srcWidth, outputFormat, outputLoc, options);
-                    generated.files.push({file: outputLoc, width: srcWidth, format: outputFormat});
+                    generated.files.push({file: outputLoc, width: srcWidth, height: srcHeight, format: outputFormat});
                 }
 
                 // Thumbnail?
