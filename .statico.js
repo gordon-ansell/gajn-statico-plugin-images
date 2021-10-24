@@ -15,7 +15,7 @@ module.exports = function(config, options = {}) {
 
     let imageCfg = {
         exts: ['jpg', 'jpeg', 'png', 'webp'],
-        widths: [1920, 1440, 1280, 1024, 768, 640, 320],
+        widths: [1920, 1440, 1280, 1024, 768, 640, 480, 320],
         upscaling: false,
         aliases: {
             jpg: 'jpeg'
