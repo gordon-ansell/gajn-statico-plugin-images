@@ -21,7 +21,6 @@
 		"src/"
 	],
 	"dependencies": {
-        "deasync": "*",
 		"gajn-framework": "../../framework",
         "image-size": "*",
         "sharp": "*"

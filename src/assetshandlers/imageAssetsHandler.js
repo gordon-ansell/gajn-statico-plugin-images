@@ -11,7 +11,6 @@ const path = require('path');
 const fs = require('fs');
 const imageSize = require("image-size");
 const sharp = require('sharp');
-const deasync = require("deasync");
 
 class StaticoImageAssetsHandlerError extends GAError {}
  
