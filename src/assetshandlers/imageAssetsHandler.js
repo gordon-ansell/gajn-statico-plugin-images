@@ -237,6 +237,15 @@ class StaticoImageAssetsHandlerError extends GAError {}
                 }        
             }));
 
+            if (generated.files && generated.files.length > 0) {
+                for (let item of generated.files) {
+                    let sanity = (item.match(/_generatedImages/g)).length;
+                    if (sanity > 1) {
+                        throw new StaticoImageAssetsHandlerError(`Generated images string '_generatedImages' appears more than once in path for: ${item}, while processing ${relPath}.`);
+                    }
+                }
+            }
+
             // Save generated.
             options.generated.set(relPath, generated);
             this.saveGenerated();

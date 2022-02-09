@@ -42,6 +42,7 @@ module.exports = function(config, options = {}) {
             height: 720
         },
         thumbnailFilenameMask: '{fn}-{width}-thumbnail.{ext}',
+        genDir: '_generatedImages',
         outputDir: config.asset('_generatedImages'),
         mimes: {
             jpeg: "image/jpeg",
