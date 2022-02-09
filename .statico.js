@@ -52,7 +52,7 @@ module.exports = function(config, options = {}) {
         },
         generated: new Map(),
         generatedStoreFile: '.generatedImages.json', 
-        generatedStorePath: undefined
+        generatedStorePath: undefined,
     };
 
     imageCfg.generatedStorePath = path.join(config.sitePath, imageCfg.generatedStoreFile);
