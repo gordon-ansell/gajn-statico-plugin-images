@@ -11,6 +11,8 @@ const path = require('path');
 const fs = require('fs');
 const imageSize = require("image-size");
 const sharp = require('sharp');
+const debug = require('debug')('Statico:plugin:images:ImageAssetHandler'),
+      debugf = require('debug')('FStatico:plugin:images:ImageAssetHandler');
 
 class StaticoImageAssetsHandlerError extends GAError {}
  
@@ -142,7 +144,7 @@ class StaticoImageAssetsHandlerError extends GAError {}
         fsutils.mkdirRecurse(path.dirname(outputPath));
 
         return await sharper.toFile(outputPath).then(info => {
-            syslog.debug(`Wrote image file: ${outputPath.replace(this.config.sitePath, '')}`, 'AssetsHandler:Image');
+            debug(`Wrote image file: ${outputPath.replace(this.config.sitePath, '')}`);
             return info.height;
         })
         .catch(err => {
@@ -184,9 +186,9 @@ class StaticoImageAssetsHandlerError extends GAError {}
             let srcHeight = dims.height;
 
             //let op = path.join(this.config.outputPath, userOptions.output, path.basename(fp, path.extname(fp)) + '.css');
-            syslog.trace(`Image template handler is processing file: ${relPath}`, 'AssetsHandler:Image');
-            syslog.trace(`Source image size is ${srcWidth} x ${srcHeight}.`, 'AssetsHandler:Image');
-            syslog.trace(`Will output images to ${op}.`, 'AssetsHandler:Image');
+            debug(`Image template handler is processing file: ${relPath}`);
+            debug(`Source image size is ${srcWidth} x ${srcHeight}.`);
+            debug(`Will output images to ${op}.`);
 
             let generated = {
                 files: []
@@ -201,12 +203,12 @@ class StaticoImageAssetsHandlerError extends GAError {}
                                 .replace('{width}', outputWidth)
                                 .replace('{ext}', outputFormat));
                         processedSomething = true;
-                        syslog.trace(`Processing ${relPath} at ${outputWidth} (srcWidth = ${srcWidth}), format ${outputFormat}`, 'AssetsHandler:Image');
-                        syslog.trace(`===> will output to ${outputLoc}`, 'AssetsHandler:Image');
+                        debug(`Processing ${relPath} at ${outputWidth} (srcWidth = ${srcWidth}), format ${outputFormat}`);
+                        debug(`===> will output to ${outputLoc}`);
                         let outputHeight = await this.resizeImage(absPath, outputWidth, outputFormat, outputLoc, options);
                         generated.files.push({file: outputLoc, width: outputWidth, height: outputHeight, format: outputFormat});
                     } else {
-                        syslog.trace(`Skipping ${relPath} because ${outputWidth} < ${srcWidth}, format ${outputFormat}`, 'AssetsHandler:Image');
+                        debug(`Skipping ${relPath} because ${outputWidth} < ${srcWidth}, format ${outputFormat}`);
                     }
 
                 }));
@@ -217,8 +219,8 @@ class StaticoImageAssetsHandlerError extends GAError {}
                         options.filenameMask.replace('{fn}', basename)
                             .replace('{width}', srcWidth)
                             .replace('{ext}', outputFormat));
-                    syslog.trace(`Default processing ${relPath} at ${srcWidth}, format ${outputFormat}`, 'AssetsHandler:Image');
-                    syslog.trace(`===> will output to ${outputLoc}`, 'AssetsHandler:Image');
+                    debug(`Default processing ${relPath} at ${srcWidth}, format ${outputFormat}`);
+                    debug(`===> will output to ${outputLoc}`);
                     await this.resizeImage(absPath, srcWidth, outputFormat, outputLoc, options);
                     generated.files.push({file: outputLoc, width: srcWidth, height: srcHeight, format: outputFormat});
                 }
@@ -231,8 +233,8 @@ class StaticoImageAssetsHandlerError extends GAError {}
                         options.thumbnailFilenameMask.replace('{fn}', basename)
                             .replace('{width}', widthWanted)
                             .replace('{ext}', outputFormat));
-                    syslog.trace(`Processing ${relPath} at ${widthWanted}, format ${outputFormat}`, 'AssetsHandler:Image');
-                    syslog.trace(`===> will output to ${outputLoc}`, 'AssetsHandler:Image');
+                    debug(`Processing ${relPath} at ${widthWanted}, format ${outputFormat}`);
+                    debug(`===> will output to ${outputLoc}`);
                     await this.resizeImage(absPath, widthWanted, outputFormat, outputLoc, options);
                 }        
             }));

@@ -10,6 +10,9 @@ const { string, syslog, GAError } = require('gajn-framework');
 const ImageAssetsHandler = require('./src/assetshandlers/imageAssetsHandler');
 const ImgShortcode = require('./src/shortcodes/imgShortcode');
 const path = require('path');
+const debug = require('debug')('Statico:plugin:images'),
+      debugf = require('debug')('FStatico:plugin:images');
+
 
 module.exports = function(config, options = {}) {
 
@@ -63,6 +66,6 @@ module.exports = function(config, options = {}) {
     config.assetHandlers.addHandler('image', new ImageAssetsHandler(config), ['jpg', 'jpeg', 'png', 'webp']);
 
     config.addNunjucksShortcode('img', ImgShortcode, true);
-    syslog.debug(`Added shortcode to Nunjucks: img`);
+    debug(`Added shortcode to Nunjucks: img`);
 
 }
