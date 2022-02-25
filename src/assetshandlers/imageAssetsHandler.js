@@ -263,7 +263,7 @@ class StaticoImageAssetsHandlerError extends GAError {}
         let opc = path.join(this.config.outputPath, absPath.replace(this.config.sitePath, ''));
 
         if (this.config.processArgs.argv.dryrun) {
-            debugd(`Copy: ${absPath} => ${opc}`)
+            debugd(`Copy: ${absPath.replace(this.config.sitePath, '')} => ${opc.replace(this.config.sitePath, '')}`)
         } else {
             fsutils.mkdirRecurse(path.dirname(opc));
             fsutils.copyFile(absPath, opc);
