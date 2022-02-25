@@ -12,7 +12,8 @@ const fs = require('fs');
 const imageSize = require("image-size");
 const sharp = require('sharp');
 const debug = require('debug')('Statico:plugin:images:ImageAssetHandler'),
-      debugf = require('debug')('FStatico:plugin:images:ImageAssetHandler');
+      debugf = require('debug')('Full.Statico:plugin:images:ImageAssetHandler'),
+      debugd = require('debug')('DryRun.Statico:plugin:images:ImageAssetHandler');
 
 class StaticoImageAssetsHandlerError extends GAError {}
  
@@ -143,13 +144,18 @@ class StaticoImageAssetsHandlerError extends GAError {}
         // Make the directory.
         fsutils.mkdirRecurse(path.dirname(outputPath));
 
-        return await sharper.toFile(outputPath).then(info => {
-            debug(`Wrote image file: ${outputPath.replace(this.config.sitePath, '')}`);
-            return info.height;
-        })
-        .catch(err => {
-            syslog.error(`Failed to create ${outputPath}: ${err.message}.`);
-        });
+        if (this.config.processArgs.argv.dryrun) {
+            debugd(`Write: %s`, outputPath.replace(this.config.sitePath, ''));
+            return 0;
+        } else {
+            return await sharper.toFile(outputPath).then(info => {
+                debug(`Wrote image file: ${outputPath.replace(this.config.sitePath, '')}`);
+                return info.height;
+            })
+            .catch(err => {
+                syslog.error(`Failed to create ${outputPath}: ${err.message}.`);
+            });
+        }
 
     }
  
@@ -256,8 +262,12 @@ class StaticoImageAssetsHandlerError extends GAError {}
         // Copy the file too.
         let opc = path.join(this.config.outputPath, absPath.replace(this.config.sitePath, ''));
 
-        fsutils.mkdirRecurse(path.dirname(opc));
-        fsutils.copyFile(absPath, opc);
+        if (this.config.processArgs.argv.dryrun) {
+            debugd(`Copy: ${absPath} => ${opc}`)
+        } else {
+            fsutils.mkdirRecurse(path.dirname(opc));
+            fsutils.copyFile(absPath, opc);
+        }
 
     }
  
