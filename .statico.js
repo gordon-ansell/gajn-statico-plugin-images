@@ -6,7 +6,7 @@
  */
 'use strict';
 
-const { string, syslog, GAError } = require('gajn-framework');
+const { string, syslog, GAError } = require('js-framework');
 const ImageAssetsHandler = require('./src/assetshandlers/imageAssetsHandler');
 const ImgShortcode = require('./src/shortcodes/imgShortcode');
 const path = require('path');

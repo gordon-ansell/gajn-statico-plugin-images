@@ -6,7 +6,7 @@
  */
 'use strict';
 
-const { fsutils, GAError, syslog, mkdirRecurse } = require('gajn-framework');
+const { fsutils, GAError, syslog, mkdirRecurse } = require('js-framework');
 const path = require('path');
 const fs = require('fs');
 const imageSize = require("image-size");
