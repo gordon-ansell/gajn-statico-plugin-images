@@ -21,7 +21,7 @@
 		"src/"
 	],
 	"dependencies": {
-		"gajn-framework": "../../framework",
+		"js-framework": "../../framework",
         "image-size": "*",
         "sharp": "*"
 	},

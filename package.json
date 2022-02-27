@@ -22,7 +22,7 @@
 	],
 	"dependencies": {
         "debug": "*",
-		"gajn-framework": "gordon-ansell/gajn-framework",
+		"js-framework": "gordon-ansell/js-framework",
         "image-size": "*",
         "sharp": "*"
 	},
