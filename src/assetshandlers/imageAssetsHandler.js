@@ -175,6 +175,8 @@ class StaticoImageAssetsHandlerError extends GAError {}
         // Add the placeholder width.
         options.widths.push(options.placeholderSize);
 
+        console.log(options.widths);
+
         // Extract bits of the sourse path.
         let absPath = filePath;
         let relPath = absPath.replace(this.config.sitePath, '');
