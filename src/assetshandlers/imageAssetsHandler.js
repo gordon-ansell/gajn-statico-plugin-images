@@ -205,7 +205,7 @@ class StaticoImageAssetsHandlerError extends GAError {}
             await Promise.all(options.formats[ext].map(async outputFormat => {
                 let processedSomething = false;
                 if (!(outputFormat in generated)) {
-                    generated[outputFormat] = {files: []};
+                    generated[outputFormat] = {files: [], thumbnail: null};
                 }
                 await Promise.all(options.widths.map(async outputWidth => {
                     if (srcWidth >= outputWidth || options.allowUpscale === true) {
@@ -222,7 +222,7 @@ class StaticoImageAssetsHandlerError extends GAError {}
                         debug(`===> will output to ${outputLoc}`);
                         let outputHeight = await this.resizeImage(absPath, outputWidth, outputFormat, outputLoc, options);
 
-                        generated[outputFormat].files.push({file: outputLoc, width: outputWidth, height: outputHeight, format: outputFormat, tn: false});
+                        generated[outputFormat].files.push({file: outputLoc, width: outputWidth, height: outputHeight, format: outputFormat});
                     } else {
                         debug(`Skipping ${relPath} because ${outputWidth} < ${srcWidth}, format ${outputFormat}`);
                     }
@@ -242,7 +242,7 @@ class StaticoImageAssetsHandlerError extends GAError {}
                     debug(`Default processing ${relPath} at ${srcWidth}, format ${outputFormat}`);
                     debug(`===> will output to ${outputLoc}`);
                     await this.resizeImage(absPath, srcWidth, outputFormat, outputLoc, options);
-                    generated[outputFormat].files.push({file: outputLoc, width: srcWidth, height: srcHeight, format: outputFormat, tn: false});
+                    generated[outputFormat].files.push({file: outputLoc, width: srcWidth, height: srcHeight, format: outputFormat});
                 }
 
                 // Thumbnail?
@@ -260,7 +260,7 @@ class StaticoImageAssetsHandlerError extends GAError {}
                     debug(`Processing ${relPath} at ${widthWanted}, format ${outputFormat}`);
                     debug(`===> will output to ${outputLoc}`);
                     let outputHeight = await this.resizeImage(absPath, widthWanted, outputFormat, outputLoc, options);
-                    generated[outputFormat].files.push({file: outputLoc, width: widthWanted, height: outputHeight, format: outputFormat, tn: true});
+                    generated[outputFormat].thumbnail = {file: outputLoc, width: widthWanted, height: outputHeight, format: outputFormat};
                 }        
             }));
 
