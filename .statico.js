@@ -30,6 +30,7 @@ module.exports = function(config, options = {}) {
             jpeg: ['webp', 'jpeg'],
             webp: ['webp', 'jpeg'],
         },
+        baseTypes: ['jpg', 'jpeg', 'png'],
         sharp: {
             constructorOptions: {},
             imageTypeOptions: {
