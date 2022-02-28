@@ -284,7 +284,7 @@ class StaticoImageAssetsHandlerError extends GAError {}
                 generated[outputFormat].files.sort((a,b) => (a.width > b.width) ? 1 : ((b.width > a.width) ? -1 : 0))
             }
 
-            syslog.inspect(generated, "Error");
+            //syslog.inspect(generated, "Error");
 
             /*
             if (generated.files && generated.files.length > 0) {
