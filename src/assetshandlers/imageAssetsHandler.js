@@ -107,7 +107,7 @@ class StaticoImageAssetsHandlerError extends GAError {}
             }
 
             if (resizeHeight > srcHeight) {
-                aspect = resizeWifth / resizeHeight;
+                aspect = resizeWidth / resizeHeight;
                 resizeHeight = srcHeight;
                 resizeWidth = resizeHeight * aspect;
             }
