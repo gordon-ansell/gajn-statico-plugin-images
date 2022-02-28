@@ -237,7 +237,8 @@ class StaticoImageAssetsHandlerError extends GAError {}
                         debug(`===> will output to ${outputLoc}`);
                         let outputHeight = await this.resizeImage(absPath, outputWidth, outputFormat, outputLoc, options);
 
-                        generated[outputFormat].files.push({file: outputLoc, width: outputWidth, height: outputHeight, mime: this.getMime(outputFormat)});
+                        generated[outputFormat].files.push({file: outputLoc.replace(this.config.sitePath, ''), 
+                            width: outputWidth, height: outputHeight, mime: this.getMime(outputFormat)});
                     } else {
                         debug(`Skipping ${relPath} because ${outputWidth} < ${srcWidth}, format ${outputFormat}`);
                     }
@@ -257,7 +258,8 @@ class StaticoImageAssetsHandlerError extends GAError {}
                     debug(`Default processing ${relPath} at ${srcWidth}, format ${outputFormat}`);
                     debug(`===> will output to ${outputLoc}`);
                     await this.resizeImage(absPath, srcWidth, outputFormat, outputLoc, options);
-                    generated[outputFormat].files.push({file: outputLoc, width: srcWidth, height: srcHeight, mime: this.getMime(outputFormat)});
+                    generated[outputFormat].files.push({file: outputLoc.replace(this.config.sitePath, ''), 
+                        width: srcWidth, height: srcHeight, mime: this.getMime(outputFormat)});
                 }
 
                 // Thumbnail?
@@ -275,7 +277,8 @@ class StaticoImageAssetsHandlerError extends GAError {}
                     debug(`Processing ${relPath} at ${widthWanted}, format ${outputFormat}`);
                     debug(`===> will output to ${outputLoc}`);
                     let outputHeight = await this.resizeImage(absPath, widthWanted, outputFormat, outputLoc, options);
-                    generated[outputFormat].thumbnail = {file: outputLoc, width: widthWanted, height: outputHeight, mime: this.getMime(outputFormat)};
+                    generated[outputFormat].thumbnail = {file: outputLoc.replace(this.config.sitePath, ''), 
+                        width: widthWanted, height: outputHeight, mime: this.getMime(outputFormat)};
                 }        
             }));
 
