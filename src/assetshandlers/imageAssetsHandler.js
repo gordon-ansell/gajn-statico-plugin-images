@@ -204,15 +204,19 @@ class StaticoImageAssetsHandlerError extends GAError {}
                 let processedSomething = false;
                 await Promise.all(options.widths.map(async outputWidth => {
                     if (srcWidth >= outputWidth || options.allowUpscale === true) {
-                        let outputLoc = path.join(op, 
-                            options.filenameMask.replace('{fn}', basename)
-                                .replace('{width}', outputWidth)
-                                .replace('{ext}', outputFormat));
+                        let outputLoc = path.join(op, options.filenameMask.replace('{fn}', basename)
+                            .replace('{width}', outputWidth).replace('{ext}', outputFormat));
+
+                        let sanity = (outputLoc.match(/_generatedImages/g)).length;
+                        if (sanity > 1) {
+                            throw new StaticoImageAssetsHandlerError(`Generated images string '_generatedImages' appears more than once in path for: ${outputLoc}, while processing ${relPath}.`);
+                        }
+
                         processedSomething = true;
                         debug(`Processing ${relPath} at ${outputWidth} (srcWidth = ${srcWidth}), format ${outputFormat}`);
                         debug(`===> will output to ${outputLoc}`);
                         let outputHeight = await this.resizeImage(absPath, outputWidth, outputFormat, outputLoc, options);
-                        generated.files.push({file: outputLoc, width: outputWidth, height: outputHeight, format: outputFormat});
+                        generated.files.push({file: outputLoc, width: outputWidth, height: outputHeight, format: outputFormat, tn: false});
                     } else {
                         debug(`Skipping ${relPath} because ${outputWidth} < ${srcWidth}, format ${outputFormat}`);
                     }
@@ -221,30 +225,40 @@ class StaticoImageAssetsHandlerError extends GAError {}
 
                 // If we processed nothing then just render at the source width.
                 if (!processedSomething) {
-                    let outputLoc = path.join(op, 
-                        options.filenameMask.replace('{fn}', basename)
-                            .replace('{width}', srcWidth)
-                            .replace('{ext}', outputFormat));
+                    let outputLoc = path.join(op, options.filenameMask.replace('{fn}', basename)
+                        .replace('{width}', srcWidth).replace('{ext}', outputFormat));
+
+                    let sanity = (outputLoc.match(/_generatedImages/g)).length;
+                    if (sanity > 1) {
+                        throw new StaticoImageAssetsHandlerError(`Generated images string '_generatedImages' appears more than once in path for: ${outputLoc}, while processing ${relPath}.`);
+                    }
+
                     debug(`Default processing ${relPath} at ${srcWidth}, format ${outputFormat}`);
                     debug(`===> will output to ${outputLoc}`);
                     await this.resizeImage(absPath, srcWidth, outputFormat, outputLoc, options);
-                    generated.files.push({file: outputLoc, width: srcWidth, height: srcHeight, format: outputFormat});
+                    generated.files.push({file: outputLoc, width: srcWidth, height: srcHeight, format: outputFormat, tn: false});
                 }
 
                 // Thumbnail?
                 if (options.generateThumbnail) {
                     let [widthWanted, heightWanted] = this.aspectResize(srcWidth, srcHeight, options.allowUpscale, 
                         options.thumbnailSize.width, options.thumbnailSize.height);
-                    let outputLoc = path.join(op, 
-                        options.thumbnailFilenameMask.replace('{fn}', basename)
-                            .replace('{width}', widthWanted)
-                            .replace('{ext}', outputFormat));
+                    let outputLoc = path.join(op, options.thumbnailFilenameMask.replace('{fn}', basename)
+                        .replace('{width}', widthWanted).replace('{ext}', outputFormat));
+
+                    let sanity = (outputLoc.match(/_generatedImages/g)).length;
+                    if (sanity > 1) {
+                        throw new StaticoImageAssetsHandlerError(`Generated images string '_generatedImages' appears more than once in path for: ${outputLoc}, while processing ${relPath}.`);
+                    }
+
                     debug(`Processing ${relPath} at ${widthWanted}, format ${outputFormat}`);
                     debug(`===> will output to ${outputLoc}`);
-                    await this.resizeImage(absPath, widthWanted, outputFormat, outputLoc, options);
+                    let outputHeight = await this.resizeImage(absPath, widthWanted, outputFormat, outputLoc, options);
+                    generated.files.push({file: outputLoc, width: widthWanted, height: outputHeight, format: outputFormat, tn: true});
                 }        
             }));
 
+            /*
             if (generated.files && generated.files.length > 0) {
                 for (let item of generated.files) {
                     let sanity = (item.file.match(/_generatedImages/g)).length;
@@ -253,6 +267,7 @@ class StaticoImageAssetsHandlerError extends GAError {}
                     }
                 }
             }
+            */
 
             // Save generated.
             options.generated.set(relPath, generated);
