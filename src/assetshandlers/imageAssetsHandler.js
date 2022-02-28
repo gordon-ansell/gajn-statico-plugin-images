@@ -173,7 +173,7 @@ class StaticoImageAssetsHandlerError extends GAError {}
         let options = this.config.assetHandlers.image;
 
         if (options.placeholderWidth && (!options.widths.includes(options.placeholderWidth))) {
-            options.widths.push(placeholderWidth);
+            options.widths.push(options.placeholderWidth);
         }
 
         // Extract bits of the sourse path.
