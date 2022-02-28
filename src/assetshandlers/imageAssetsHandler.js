@@ -200,12 +200,13 @@ class StaticoImageAssetsHandlerError extends GAError {}
             debug(`Source image size is ${srcWidth} x ${srcHeight}.`);
             debug(`Will output images to ${op}.`);
 
-            let generated = {
-                files: []
-            }
+            let generated = {}
 
             await Promise.all(options.formats[ext].map(async outputFormat => {
                 let processedSomething = false;
+                if (!(outputFormat in generated)) {
+                    generated[outputFormat] = {files: []};
+                }
                 await Promise.all(options.widths.map(async outputWidth => {
                     if (srcWidth >= outputWidth || options.allowUpscale === true) {
                         let outputLoc = path.join(op, options.filenameMask.replace('{fn}', basename)
@@ -220,7 +221,8 @@ class StaticoImageAssetsHandlerError extends GAError {}
                         debug(`Processing ${relPath} at ${outputWidth} (srcWidth = ${srcWidth}), format ${outputFormat}`);
                         debug(`===> will output to ${outputLoc}`);
                         let outputHeight = await this.resizeImage(absPath, outputWidth, outputFormat, outputLoc, options);
-                        generated.files.push({file: outputLoc, width: outputWidth, height: outputHeight, format: outputFormat, tn: false});
+
+                        generated[outputFormat].files.push({file: outputLoc, width: outputWidth, height: outputHeight, format: outputFormat, tn: false});
                     } else {
                         debug(`Skipping ${relPath} because ${outputWidth} < ${srcWidth}, format ${outputFormat}`);
                     }
@@ -240,7 +242,7 @@ class StaticoImageAssetsHandlerError extends GAError {}
                     debug(`Default processing ${relPath} at ${srcWidth}, format ${outputFormat}`);
                     debug(`===> will output to ${outputLoc}`);
                     await this.resizeImage(absPath, srcWidth, outputFormat, outputLoc, options);
-                    generated.files.push({file: outputLoc, width: srcWidth, height: srcHeight, format: outputFormat, tn: false});
+                    generated[outputFormat].files.push({file: outputLoc, width: srcWidth, height: srcHeight, format: outputFormat, tn: false});
                 }
 
                 // Thumbnail?
@@ -258,9 +260,16 @@ class StaticoImageAssetsHandlerError extends GAError {}
                     debug(`Processing ${relPath} at ${widthWanted}, format ${outputFormat}`);
                     debug(`===> will output to ${outputLoc}`);
                     let outputHeight = await this.resizeImage(absPath, widthWanted, outputFormat, outputLoc, options);
-                    generated.files.push({file: outputLoc, width: widthWanted, height: outputHeight, format: outputFormat, tn: true});
+                    generated[outputFormat].files.push({file: outputLoc, width: widthWanted, height: outputHeight, format: outputFormat, tn: true});
                 }        
             }));
+
+            // Sort the files in size order.
+            for (let outputFormat in generated) {
+                generated[outputFormat].files.sort((a,b) => (a.width > b.width) ? 1 : ((b.width > a.width) ? -1 : 0))
+            }
+
+            syslog.inspect(generated, "Error");
 
             /*
             if (generated.files && generated.files.length > 0) {
