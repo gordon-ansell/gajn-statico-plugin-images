@@ -172,8 +172,6 @@ class StaticoImageAssetsHandlerError extends GAError {}
         // Grab the options.
         let options = this.config.assetHandlers.image;
 
-        syslog.inspect(options, "error");
-
         // Extract bits of the sourse path.
         let absPath = filePath;
         let relPath = absPath.replace(this.config.sitePath, '');
