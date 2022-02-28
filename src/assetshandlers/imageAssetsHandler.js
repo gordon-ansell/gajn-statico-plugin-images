@@ -66,6 +66,21 @@ class StaticoImageAssetsHandlerError extends GAError {}
     }
 
     /**
+     * Get the mime type for a given extension.
+     * 
+     * @param   {string}    ext     Extension.
+     * 
+     * @return  {string}
+     */
+    getMime(ext)
+    {
+        if (!this.config.assetHandlers.image.mimes[ext]) {
+            throw new StaticoImageAssetsHandlerError(`No corresponding mime type found for image with extension '${ext}'.`)
+        }
+        return this.config.assetHandlers.image.mimes[ext];
+    }
+
+    /**
      * Calculate the new sise to maintain aspect ratio.
      * 
      * @param   {number}    srcWidth        Image width
@@ -222,7 +237,7 @@ class StaticoImageAssetsHandlerError extends GAError {}
                         debug(`===> will output to ${outputLoc}`);
                         let outputHeight = await this.resizeImage(absPath, outputWidth, outputFormat, outputLoc, options);
 
-                        generated[outputFormat].files.push({file: outputLoc, width: outputWidth, height: outputHeight, format: outputFormat});
+                        generated[outputFormat].files.push({file: outputLoc, width: outputWidth, height: outputHeight, mime: this.getMime(outputFormat)});
                     } else {
                         debug(`Skipping ${relPath} because ${outputWidth} < ${srcWidth}, format ${outputFormat}`);
                     }
@@ -242,7 +257,7 @@ class StaticoImageAssetsHandlerError extends GAError {}
                     debug(`Default processing ${relPath} at ${srcWidth}, format ${outputFormat}`);
                     debug(`===> will output to ${outputLoc}`);
                     await this.resizeImage(absPath, srcWidth, outputFormat, outputLoc, options);
-                    generated[outputFormat].files.push({file: outputLoc, width: srcWidth, height: srcHeight, format: outputFormat});
+                    generated[outputFormat].files.push({file: outputLoc, width: srcWidth, height: srcHeight, mime: this.getMime(outputFormat)});
                 }
 
                 // Thumbnail?
@@ -260,7 +275,7 @@ class StaticoImageAssetsHandlerError extends GAError {}
                     debug(`Processing ${relPath} at ${widthWanted}, format ${outputFormat}`);
                     debug(`===> will output to ${outputLoc}`);
                     let outputHeight = await this.resizeImage(absPath, widthWanted, outputFormat, outputLoc, options);
-                    generated[outputFormat].thumbnail = {file: outputLoc, width: widthWanted, height: outputHeight, format: outputFormat};
+                    generated[outputFormat].thumbnail = {file: outputLoc, width: widthWanted, height: outputHeight, mime: this.getMime(outputFormat)};
                 }        
             }));
 

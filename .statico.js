@@ -51,6 +51,7 @@ module.exports = function(config, options = {}) {
         outputDir: config.asset('_generatedImages'),
         mimes: {
             jpeg: "image/jpeg",
+            jpg: "image/jpeg",
             webp: "image/webp",
             png: "image/png",
             svg: "image/svg+xml",
