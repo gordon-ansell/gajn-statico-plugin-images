@@ -16,9 +16,11 @@ const debug = require('debug')('Statico:plugin:images'),
 
 module.exports = function(config, options = {}) {
 
+    const placeholderSize = 24;
+
     let imageCfg = {
         exts: ['jpg', 'jpeg', 'png', 'webp'],
-        widths: [1920, 1440, 1280, 1024, 768, 640, 480, 320],
+        widths: [1920, 1440, 1280, 1024, 768, 640, 480, 320, placeholderSize],
         upscaling: false,
         aliases: {
             jpg: 'jpeg'
@@ -44,7 +46,6 @@ module.exports = function(config, options = {}) {
             width: 1280,
             height: 720
         },
-        placeholderSize: 24,
         thumbnailFilenameMask: '{fn}-{width}-thumbnail.{ext}',
         genDir: '_generatedImages',
         outputDir: config.asset('_generatedImages'),
