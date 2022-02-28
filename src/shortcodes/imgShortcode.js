@@ -111,7 +111,7 @@ class ImgShortcode extends NunjucksShortcode
     render(context, args)
     {
         let url = args[0];
-        let files = this._findFiles(url);
+        //let files = this._findFiles(url);
 
         let opts = {
             lazyload: this.config.lazyload,
@@ -121,19 +121,21 @@ class ImgShortcode extends NunjucksShortcode
         let ret = '';
         let imgHtml = new ImageHtml(opts, this.config.hostname);
 
-        let sources = this.formatFilesArray(files);
+        //let sources = this.formatFilesArray(files);
 
         let imageOpts = this.config.assetHandlers.image;
         if (!imageOpts.generated.has(url)) {
             throw new NunjucksShortcodeImgError(`No generated files for URL: ${url}`);
         }
 
-        let generated = imageOpts.generated.get(url) || null;
+        let generated = imageOpts.generated.get(url);
+        /*
         let sel = generated.files[0];
         let w = sel.width;
         let h = sel.height;
+        */
 
-        ret = imgHtml.render(sources, args[1], true, w, h);
+        ret = imgHtml.renderComplex(url, generated, args[1]);
 
         let imgs = imgHtml.metaIds;
         if (imgs.length > 0) {
