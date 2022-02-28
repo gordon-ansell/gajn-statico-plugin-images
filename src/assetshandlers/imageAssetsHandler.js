@@ -172,7 +172,7 @@ class StaticoImageAssetsHandlerError extends GAError {}
         // Grab the options.
         let options = this.config.assetHandlers.image;
 
-        if (options.placeholderWidth && (!options.widths.includes(placeholderWidth))) {
+        if (options.placeholderWidth && (!options.widths.includes(options.placeholderWidth))) {
             options.widths.push(placeholderWidth);
         }
 
