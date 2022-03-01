@@ -7,7 +7,7 @@
 'use strict';
 
 const path = require('path');
-const { syslog, NunjucksShortcode, GAError, ImageHtml, merge } = require('js-framework'); 
+const { syslog, NunjucksShortcode, GAError, ImageHtml, merge, ComplexImage } = require('js-framework'); 
 
 class NunjucksShortcodeImgError extends GAError {}
 
