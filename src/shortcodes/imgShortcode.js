@@ -119,7 +119,9 @@ class ImgShortcode extends NunjucksShortcode
         }
 
         let ret = '';
-        let imgHtml = new ImageHtml(this.config.assetHandlers.image, this.config.hostname);
+        //let imgHtml = new ImageHtml(this.config.assetHandlers.image, this.config.hostname);
+        let imgHtml = new ComplexImage(this.config.lazyload, this.config.figureClass, this.config.sitePath, 
+            this.config.hostname, this.config.assetHandlers.image);
 
         //let sources = this.formatFilesArray(files);
 
@@ -135,18 +137,20 @@ class ImgShortcode extends NunjucksShortcode
         let h = sel.height;
         */
 
-        ret = imgHtml.renderComplex(url, generated, args[1]);
+        ret = imgHtml.render(generated, args[1], url);
 
         let imgs = imgHtml.metaIds;
         if (imgs.length > 0) {
             if (!this.config.imagesSaved) {
                 this.config.imagesSaved = {};
             }
-            if (this.config.imagesSaved[context.ctx.permalink]) {
-                this.config.imagesSaved[context.ctx.permalink] = 
-                    merge.merge(this.config.imagesSaved[context.ctx.permalink], imgs);
-            } else {
-                this.config.imagesSaved[context.ctx.permalink] = imgs;
+            if (!this.config.imagesSaved[context.ctx.permalink]) {
+                this.config.imagesSaved[context.ctx.permalink] = [];
+            }
+            for (let item of imgs) {
+                if (!this.config.imagesSaved[context.ctx.permalink].includes(item)) {
+                    this.config.imagesSaved[context.ctx.permalink].push(item);
+                }
             }
         }
 
