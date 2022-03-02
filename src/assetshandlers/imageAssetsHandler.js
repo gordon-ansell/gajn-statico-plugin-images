@@ -236,6 +236,7 @@ class StaticoImageAssetsHandlerError extends GAError {}
                         debug(`Processing ${relPath} at ${outputWidth} (srcWidth = ${srcWidth}), format ${outputFormat}`);
                         debug(`===> will output to ${outputLoc}`);
                         let outputHeight = await this.resizeImage(absPath, outputWidth, outputFormat, outputLoc, options);
+                        debug(`Done ${relPath}`);
 
                         generated[outputFormat].files.push({file: outputLoc.replace(this.config.sitePath, ''), 
                             width: outputWidth, height: outputHeight, mime: this.getMime(outputFormat)});
