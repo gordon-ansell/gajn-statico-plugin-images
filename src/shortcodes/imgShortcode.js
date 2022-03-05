@@ -118,6 +118,35 @@ class ImgShortcode extends NunjucksShortcode
             figureClass: this.config.figureClass
         }
 
+        let imgSpecs = {};
+
+        for (let argnum of [1,2]) {
+            let argdata = args[argnum];
+            if (null === argdata) {
+                continue;
+            }
+            if("object" === typeof(argdata)) {
+                for (let key in argdata) {
+                    imgSpec[key] = argdata[key];
+                }
+            } else if ("string" === typeof(argdata)) {
+                let sp = argdata.trim().split('|');
+                for (let subdata of sp) {
+                    if (-1 !== subdata.indexOf('=')) {
+                        let ds = subdata.split('=');
+                        if (!ds[0].trim().startsWith('__')) {
+                            imgSpec[ds[0].trim()] = ds[1].trim();
+                        }
+                    } else {
+                        if (!subdata.trim().startsWith('__')) {
+                            imgSpec[subdata.trim()] = true;
+                        }
+                    }
+                }
+            }
+        } 
+
+
         let ret = '';
         //let imgHtml = new ImageHtml(this.config.assetHandlers.image, this.config.hostname);
         let imgHtml = new ComplexImage(this.config.lazyload, this.config.figureClass, this.config.sitePath, 
@@ -137,7 +166,7 @@ class ImgShortcode extends NunjucksShortcode
         let h = sel.height;
         */
 
-        ret = imgHtml.render(generated, args[1], url);
+        ret = imgHtml.render(generated, imgSpecs, url);
 
         let imgs = imgHtml.metaIds;
         if (imgs.length > 0) {
