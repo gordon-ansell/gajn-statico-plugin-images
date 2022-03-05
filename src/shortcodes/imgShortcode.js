@@ -118,7 +118,7 @@ class ImgShortcode extends NunjucksShortcode
             figureClass: this.config.figureClass
         }
 
-        let imgSpecs = {};
+        let imgSpec = {};
 
         for (let argnum of [1,2]) {
             let argdata = args[argnum];
