@@ -166,7 +166,7 @@ class ImgShortcode extends NunjucksShortcode
         let h = sel.height;
         */
 
-        ret = imgHtml.render(generated, imgSpecs, url);
+        ret = imgHtml.render(generated, imgSpec, url);
 
         let imgs = imgHtml.metaIds;
         if (imgs.length > 0) {
