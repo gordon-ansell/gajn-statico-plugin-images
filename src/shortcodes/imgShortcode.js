@@ -8,6 +8,8 @@
 
 const path = require('path');
 const { syslog, NunjucksShortcode, GAError, ImageHtml, merge, ComplexImage } = require('js-framework'); 
+const debug = require('debug')('Statico:plugin:images:ImgShortcode');
+
 
 class NunjucksShortcodeImgError extends GAError {}
 
@@ -160,6 +162,7 @@ class ImgShortcode extends NunjucksShortcode
         }
 
         let generated = imageOpts.generated.get(url);
+        debug(`Generated: %O`, generated);
         /*
         let sel = generated.files[0];
         let w = sel.width;
