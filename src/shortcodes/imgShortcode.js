@@ -7,7 +7,7 @@
 'use strict';
 
 const path = require('path');
-const { syslog, NunjucksShortcode, GAError, ComplexImage } = require('js-framework'); 
+const { NunjucksShortcode, GAError, ComplexImage } = require('js-framework'); 
 const debug = require('debug')('Statico:plugin:images:ImgShortcode');
 const debugf = require('debug')('Full.Statico:plugin:images:ImgShortcode');
 c
