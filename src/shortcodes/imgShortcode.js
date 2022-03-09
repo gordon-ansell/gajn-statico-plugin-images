@@ -10,7 +10,6 @@ const path = require('path');
 const { NunjucksShortcode, GAError, ComplexImage } = require('js-framework'); 
 const debug = require('debug')('Statico:plugin:images:ImgShortcode');
 const debugf = require('debug')('Full.Statico:plugin:images:ImgShortcode');
-c
 
 class NunjucksShortcodeImgError extends GAError {}
 
