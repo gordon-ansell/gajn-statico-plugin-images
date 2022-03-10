@@ -7,7 +7,7 @@
 'use strict';
 
 const path = require('path');
-const { NunjucksShortcode, GAError, ComplexImage } = require('js-framework'); 
+const { NunjucksShortcode, GAError, ComplexImage, syslog } = require('js-framework'); 
 const debug = require('debug')('Statico:plugin:images:ImgShortcode');
 const debugf = require('debug')('Full.Statico:plugin:images:ImgShortcode');
 
@@ -173,6 +173,7 @@ class ImgShortcode extends NunjucksShortcode
         ret = imgHtml.render(generated, imgSpec, url);
     
         if (imgSpec['@itemprop']) {
+            syslog.inspect(this.config.schema, "error");
             this.config.schema.addImage(url, generated);
         }
 
