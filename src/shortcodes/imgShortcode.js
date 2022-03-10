@@ -165,7 +165,6 @@ class ImgShortcode extends NunjucksShortcode
         let generated = imageOpts.generated.get(url);
         this.config.imageInfoStore.addBySrcAndPage(url, context.ctx.permalink, generated);
         debugf(`Generated: %O`, generated);
-        debug("CTX: %O", context.ctx);
         /*
         let sel = generated.files[0];
         let w = sel.width;
