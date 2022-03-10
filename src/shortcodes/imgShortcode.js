@@ -174,7 +174,6 @@ class ImgShortcode extends NunjucksShortcode
     
         if (imgSpec['@itemprop']) {
             debug("Schema obj: %O", this.config.schema);
-            syslog.inspect(this.config.schema, "error");
             //this.config.schema.addImage(url, generated);
         }
 
