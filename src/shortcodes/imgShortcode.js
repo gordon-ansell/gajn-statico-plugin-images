@@ -8,6 +8,7 @@
 
 const path = require('path');
 const { NunjucksShortcode, GAError, ComplexImage, syslog } = require('js-framework'); 
+const Schema = require('statico-plugin-schemahelpers/src/schema/schema');
 const debug = require('debug')('Statico:plugin:images:ImgShortcode');
 const debugf = require('debug')('Full.Statico:plugin:images:ImgShortcode');
 
@@ -173,8 +174,10 @@ class ImgShortcode extends NunjucksShortcode
         ret = imgHtml.render(generated, imgSpec, url);
     
         if (imgSpec['@itemprop']) {
-            debug("Schema obj: %O", this.config.schema);
-            //this.config.schema.addImage(url, generated);
+            if (!this.config.schema[context.ctx.permalink]) {
+                this.config.schema[context.ctx.permalink] = new Schema(this.config);
+            }
+            this.config.schema[context.ctx.permalink].addImage(url, generated);
         }
 
         let imgs = imgHtml.metaIds;
