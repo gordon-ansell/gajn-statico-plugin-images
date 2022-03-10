@@ -173,11 +173,13 @@ class ImgShortcode extends NunjucksShortcode
 
         ret = imgHtml.render(generated, imgSpec, url);
     
+        if (!this.config.schema[context.ctx.permalink]) {
+            this.config.schema[context.ctx.permalink] = new Schema(this.config);
+        }
         if (imgSpec['@itemprop']) {
-            if (!this.config.schema[context.ctx.permalink]) {
-                this.config.schema[context.ctx.permalink] = new Schema(this.config);
-            }
             this.config.schema[context.ctx.permalink].addImage(url, generated);
+        } else {
+            Schema.addGlobalImage(url, generated);
         }
 
         let imgs = imgHtml.metaIds;
