@@ -171,6 +171,10 @@ class ImgShortcode extends NunjucksShortcode
         */
 
         ret = imgHtml.render(generated, imgSpec, url);
+    
+        if (imgSpec['@itemprop']) {
+            this.config.schema.addImage(url, generated);
+        }
 
         let imgs = imgHtml.metaIds;
         if (imgs.length > 0) {
