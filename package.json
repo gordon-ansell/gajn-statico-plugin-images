@@ -1,6 +1,6 @@
 {
 	"name": "statico-plugin-images",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "Image sizing/conversion plugin for Statico SSG.",
 	"homepage": "https://gordonansell.com/statico",
 	"license": "MIT",
