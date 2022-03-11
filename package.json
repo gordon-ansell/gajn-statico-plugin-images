@@ -24,8 +24,7 @@
         "debug": "*",
 		"js-framework": "gordon-ansell/js-framework",
         "image-size": "*",
-        "sharp": "*",
-        "statico-plugin-schemahelpers": "gordon-ansell/statico-plugin-schemahelpers"
+        "sharp": "*"
 	},
 	"devDependencies": {},
 	"engines": {
