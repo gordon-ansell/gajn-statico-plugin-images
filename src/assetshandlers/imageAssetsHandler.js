@@ -302,7 +302,7 @@ class StaticoImageAssetsHandlerError extends GAError {}
             */
 
             // Save generated.
-            this.config.imageInfoStore.addBySec(relPath, generated);
+            this.config.imageInfoStore.addBySrc(relPath, generated);
             options.generated.set(relPath, generated);
             this.saveGenerated();
         }
