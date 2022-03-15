@@ -9,7 +9,8 @@
 const path = require('path');
 const { NunjucksShortcode, GAError, ComplexImage, syslog } = require('js-framework'); 
 const schemaPath = require.resolve("statico/src/schema/schema.js");
-const { Schema } = require(schemaPath);
+console.log(schemaPath);
+const Schema = require(schemaPath);
 const debug = require('debug')('Statico:plugin:images:ImgShortcode');
 const debugf = require('debug')('Full.Statico:plugin:images:ImgShortcode');
 
