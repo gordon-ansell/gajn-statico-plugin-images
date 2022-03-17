@@ -10,7 +10,7 @@ const { string, syslog, GAError } = require('js-framework');
 const ImageAssetsHandler = require('./src/assetshandlers/imageAssetsHandler');
 const ImgShortcode = require('./src/shortcodes/imgShortcode');
 const path = require('path');
-const pack = rqeuire('./package.json');
+const pack = require('./package.json');
 const debug = require('debug')('Statico:plugin:images'),
       debugf = require('debug')('Full.Statico:plugin:images');
 
