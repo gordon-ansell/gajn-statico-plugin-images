@@ -72,6 +72,6 @@ module.exports = function(config, options = {}) {
     config.addNunjucksShortcode('img', ImgShortcode, true);
     debug(`Added shortcode to Nunjucks: img`);
 
-    syslog.notice(`Statico image plugin version ${pack.version} started.`);
+    syslog.notice(`Statico image plugin version ${pack.version} loaded.`);
 
 }
