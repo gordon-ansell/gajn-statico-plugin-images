@@ -10,6 +10,7 @@ const { string, syslog, GAError } = require('js-framework');
 const ImageAssetsHandler = require('./src/assetshandlers/imageAssetsHandler');
 const ImgShortcode = require('./src/shortcodes/imgShortcode');
 const path = require('path');
+const pack = rqeuire('./package.json');
 const debug = require('debug')('Statico:plugin:images'),
       debugf = require('debug')('Full.Statico:plugin:images');
 
@@ -70,5 +71,7 @@ module.exports = function(config, options = {}) {
 
     config.addNunjucksShortcode('img', ImgShortcode, true);
     debug(`Added shortcode to Nunjucks: img`);
+
+    syslog.notice(`Statico image plugin version ${pack.version} started.`);
 
 }
