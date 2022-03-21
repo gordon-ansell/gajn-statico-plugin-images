@@ -21,10 +21,10 @@
 		"src/"
 	],
 	"dependencies": {
-        "debug": "*",
+        "debug": "4.3.4",
 		"js-framework": "gordon-ansell/js-framework",
-        "image-size": "*",
-        "sharp": "*"
+        "image-size": "1.0.0",
+        "sharp": "0.30.3"
 	},
 	"devDependencies": {},
 	"engines": {
