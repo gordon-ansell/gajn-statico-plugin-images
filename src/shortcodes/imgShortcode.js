@@ -165,8 +165,8 @@ class ImgShortcode extends NunjucksShortcode
         }
 
         let generated = imageOpts.generated.get(url);
-        if (-1 !== url.indexOf('eternals')) {
-            debugt(`Generated for page ${url}: %O`, generated);
+        if (-1 !== context.ctx.permalink.indexOf('eternals')) {
+            debugt(`Generated for page ${context.ctx.permalink}: %O`, generated);
         }
 
         this.config.imageInfoStore.addBySrcAndPage(url, context.ctx.permalink, generated);
