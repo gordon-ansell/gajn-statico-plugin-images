@@ -165,7 +165,7 @@ class ImgShortcode extends NunjucksShortcode
         }
 
         let generated = imageOpts.generated.get(url);
-        if (-1 !== url.indexOf('eternals-review')) {
+        if (-1 !== url.indexOf('eternals')) {
             debugt(`Generated for page ${url}: %O`, generated);
         }
 
