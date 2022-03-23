@@ -11,7 +11,6 @@ const { NunjucksShortcode, GAError, ComplexImage, syslog } = require('js-framewo
 const Schema = require(require.resolve("statico/src/schema/schema.js"));
 const debug = require('debug')('Statico:plugin:images:ImgShortcode');
 const debugf = require('debug')('Full.Statico:plugin:images:ImgShortcode');
-const debugt = require("debug")('ImageTest.Statico:plugin:images:ImgShortcode');
 
 
 class NunjucksShortcodeImgError extends GAError {}
@@ -165,9 +164,6 @@ class ImgShortcode extends NunjucksShortcode
         }
 
         let generated = imageOpts.generated.get(url);
-        if (-1 !== context.ctx.permalink.indexOf('eternals')) {
-            debugt(`Generated for page ${context.ctx.permalink}: %O`, generated);
-        }
 
         this.config.imageInfoStore.addBySrcAndPage(url, context.ctx.permalink, generated);
         debugf(`Generated: %O`, generated);
